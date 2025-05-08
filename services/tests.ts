@@ -54,7 +54,7 @@ const getClient2 = () => {
    */
   const pollingProjectConfigManager = createPollingProjectConfigManager({
     datafile: JSON.stringify(datafile),
-    sdkKey: import.meta.env.VITE_SDK_KEY,
+    sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
   });
 
   const odpManager = createOdpManager();
@@ -207,11 +207,42 @@ const getClient6 = () => {
   };
 };
 
-
 const getClient7 = () => {
-  // Todo
-}
+  /**
+   * Optimizely client is created with a polling config manager and a batch event processor with batchSize 3,
+   *  flush interval 10seconds and a custom event dispatcher
+   */
+  const pollingProjectConfigManager = createPollingProjectConfigManager({
+    sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
+  });
+  const batchEventProcessor = createBatchEventProcessor({
+    batchSize: 3,
+    flushInterval: 10 * 1000, // 10 seconds
+    eventDispatcher: {
+      dispatchEvent: (event) =>
+        new Promise((resolve) => {
+          console.log("Custom event dispatcher", event);
+          resolve({ statusCode: 200 });
+        }),
+    },
+  });
 
+  const client = createInstance({
+    projectConfigManager: pollingProjectConfigManager,
+    eventProcessor: batchEventProcessor,
+  });
+
+  return {
+    client,
+    actions: [
+      trackEvent,
+      trackEvent,
+      trackEventWithDelay(15000),
+      trackEventWithDelay(15000),
+      trackEventWithDelay(15000),
+    ],
+  };
+};
 // Test mode configuration
 const runTests = (
   optimizely: Client,
@@ -241,7 +272,7 @@ const runTests = (
 };
 
 (() => {
-  const { client, actions } = getClient6();
+  const { client, actions } = getClient7();
   const TEST_MODE: TestMode = "after"; // Change this to control test execution
 
   if (client) {
