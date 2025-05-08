@@ -52,7 +52,7 @@ This project already includes a basic implementation of the Optimizely SDK in th
 - Initializing the Optimizely client with these configurations
 - A React useEffect hook that calls `optimizely.onReady()` to initialize the SDK when the component mounts
 
-To use this implementation, create a `.env` file at the project root with your SDK key: `EXPO_PUBLIC_ODP_CHECK=your-sdk-key-here`
+To use this implementation, create a `.env` file at the project root with your SDK key: `EXPO_PUBLIC_OPTIMIZELY_SDK_KEY=your-sdk-key-here`
 
 ## Running the Application
 
