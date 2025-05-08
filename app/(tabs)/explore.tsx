@@ -1,13 +1,49 @@
 import { StyleSheet, Image, Platform } from 'react-native';
-
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useEffect } from 'react';
+import {
+  createInstance,
+  createStaticProjectConfigManager,
+  createPollingProjectConfigManager,
+  createOdpManager,
+  createBatchEventProcessor,
+  createForwardingEventProcessor,
+  createLogger,
+  DebugLog,
+} from "@optimizely/optimizely-sdk";
+
+const pollingProjectConfigManager = createPollingProjectConfigManager({
+  sdkKey: process.env.EXPO_PUBLIC_ODP_CHECK!,
+})
+const odpManager = createOdpManager()
+const logger = createLogger({
+  level: DebugLog 
+})
+
+const optimizely = createInstance({
+  projectConfigManager: pollingProjectConfigManager,
+  odpManager,
+  logger
+});
 
 export default function TabTwoScreen() {
+
+  useEffect(() => {
+    if(optimizely) {
+      optimizely?.onReady().then(() => {
+        console.log('Optimizely is ready');
+      }).catch((error) => {
+        console.error('Error initializing Optimizely:', error);
+      })
+    } 
+
+  }, [optimizely])
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
