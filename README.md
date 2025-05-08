@@ -1,50 +1,94 @@
-# Welcome to your Expo app 👋
+# React Native (Expo) + Optimizely SDK Starter
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This repository provides a starter template for integrating the Optimizely SDK with a React Native application using Expo.
 
-## Get started
+## Prerequisites
 
-1. Install dependencies
+- Node.js and npm installed
+- Xcode (for iOS development) or Android Studio (for Android development)
 
+## Installation
+
+### Step 1: Set up the Optimizely SDK
+
+1. Clone the Optimizely JavaScript SDK repository:
+   ```bash
+   git clone https://github.com/optimizely/javascript-sdk.git
+   ```
+
+2. Navigate to the SDK directory and install dependencies:
+   ```bash
+   cd javascript-sdk
+   npm install
+   ```
+
+3. Create a tarball of the SDK:
+   ```bash
+   npm pack
+   ```
+
+### Step 2: Set up the React Native Expo project
+
+1. Clone this repository (if you haven't already)
+
+2. Install the Optimizely SDK from the tarball you created:
+   ```bash
+   # Path may vary depending on your directory structure
+   npm install ../../sdk/javascript-sdk/optimizely-optimizely-sdk-5.3.4.tgz
+   ```
+
+3. Install other project dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
+## Optimizely SDK Integration
 
-   ```bash
-    npx expo start
-   ```
+This project already includes a basic implementation of the Optimizely SDK in the `app/(tabs)/explore.tsx` file. The implementation includes:
 
-In the output, you'll find options to open the app in a
+- Creating a polling project config manager with an SDK key from environment variables
+- Setting up an ODP (Optimizely Data Platform) manager
+- Configuring a logger with debug level
+- Initializing the Optimizely client with these configurations
+- A React useEffect hook that calls `optimizely.onReady()` to initialize the SDK when the component mounts
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+To use this implementation, create a `.env` file at the project root with your SDK key: `EXPO_PUBLIC_ODP_CHECK=your-sdk-key-here`
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Running the Application
 
-## Get a fresh project
-
-When you're ready, run:
-
+### On iOS:
 ```bash
-npm run reset-project
+npm run ios
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### On Android:
+```bash
+npm run android
+```
 
-## Learn more
+### On Web:
+```bash
+npm run web
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Project Structure
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- `app/` - Contains the main application screens and navigation
+- `components/` - Reusable React components
+- `constants/` - Application constants and theme configuration
+- `hooks/` - Custom React hooks
+- `assets/` - Images, fonts, and other static resources
 
-## Join the community
+## Additional Resources
 
-Join our community of developers creating universal apps.
+- [v6 pre-release doc](https://docs.developers.optimizely.com/feature-experimentation/docs/javascript-browser-sdk-v6)
+- [Expo Documentation](https://docs.expo.dev/)
+- [React Native Documentation](https://reactnative.dev/docs/getting-started)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Troubleshooting
+
+If you encounter any issues with the SDK integration, please check:
+- Ensure the tarball path is correct when installing the SDK
+- Verify that all dependencies are properly installed
+- Check the Optimizely SDK version compatibility
+- Make sure your environment variables are properly set up
