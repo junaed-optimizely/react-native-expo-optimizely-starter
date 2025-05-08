@@ -245,29 +245,29 @@ const getClient7 = () => {
 };
 
 const getClient8 = () => {
-	/**
-	 * Optimizely client is created with a polling config manager, and a DECISION notification listener is added
-	 */
+  /**
+   * Optimizely client is created with a polling config manager, and a DECISION notification listener is added
+   */
 
-	const pollingProjectConfigManager = createPollingProjectConfigManager({
-		sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
-	});
-	const client = createInstance({
-		projectConfigManager: pollingProjectConfigManager,
-	});
+  const pollingProjectConfigManager = createPollingProjectConfigManager({
+    sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
+  });
+  const client = createInstance({
+    projectConfigManager: pollingProjectConfigManager,
+  });
 
-	client?.notificationCenter.addNotificationListener(
-		NOTIFICATION_TYPES.DECISION,
-		(payload) => {
-			console.log("Decision event", payload);
-		}
-	);
+  client?.notificationCenter.addNotificationListener(
+    NOTIFICATION_TYPES.DECISION,
+    (payload) => {
+      console.log("Decision event", payload);
+    }
+  );
 
-	return {
-		client,
-		actions: [getDecision]
-	}
-}
+  return {
+    client,
+    actions: [getDecision],
+  };
+};
 
 // Test mode configuration
 const runTests = (
