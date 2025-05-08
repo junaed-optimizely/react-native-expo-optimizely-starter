@@ -18,8 +18,11 @@ import {
 } from "@optimizely/optimizely-sdk";
 
 const pollingProjectConfigManager = createPollingProjectConfigManager({
-  sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
+  sdkKey: process.env.EXPO_PUBLIC_ODP_CHECK!,
+  autoUpdate: true,
+  updateInterval: 60000
 })
+
 const odpManager = createOdpManager()
 const logger = createLogger({
   level: DebugLog 
