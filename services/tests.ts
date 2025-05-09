@@ -9,6 +9,7 @@ import {
   DebugLog,
   Client,
   NOTIFICATION_TYPES,
+	createErrorNotifier,
 } from "@optimizely/optimizely-sdk";
 import {
   sendOdpEvent,
@@ -17,6 +18,7 @@ import {
   sendOdpEventWithDelay,
   trackEventWithDelay,
   trackEvent,
+	getDecisionInvalid,
 } from "./action";
 
 import datafile from "./datafile.json";
@@ -54,7 +56,7 @@ const getClient2 = () => {
    */
   const pollingProjectConfigManager = createPollingProjectConfigManager({
     datafile: JSON.stringify(datafile),
-    sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
+    sdkKey: process.env.EXPO_PUBLIC_ODP_CHECK!,
   });
 
   const odpManager = createOdpManager();
@@ -80,7 +82,7 @@ const getClient3 = () => {
    * eventBatchSize 3 and flush interval 5 minute. A notification listener is added for project config update event.
    */
   const pollingProjectConfigManager = createPollingProjectConfigManager({
-    sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
+    sdkKey: process.env.EXPO_PUBLIC_ODP_CHECK!,
     autoUpdate: true,
   });
   const odpManager = createOdpManager({
@@ -180,6 +182,9 @@ const getClient6 = () => {
   const client = createInstance({
     projectConfigManager: pollingProjectConfigManager,
     eventProcessor: batchEventProcessor,
+		logger: createLogger({
+			level: DebugLog,
+		})
   });
 
   client?.notificationCenter.addNotificationListener(
@@ -269,6 +274,54 @@ const getClient8 = () => {
   };
 };
 
+
+const getClient9 = () => {
+	/**
+	 * Optimizely client is created with a polling config manager and a logger with DebugLog level
+	 */
+	const pollingProjectConfigManager = createPollingProjectConfigManager({
+		sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
+	});
+
+	const logger = createLogger({
+		level: DebugLog,
+	});
+
+	const client = createInstance({
+		projectConfigManager: pollingProjectConfigManager,
+		logger,
+	});
+
+	return {
+		client,
+		actions: [getDecision, getDecisionInvalid],
+	};
+}
+
+
+const getClient10 = () => {
+  /**
+   * Optimizely client is created with a polling config manager with just an sdkKey, and a custom error handler
+   */
+  const pollingProjectConfigManager = createPollingProjectConfigManager({
+    sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
+  });
+  const errorNotifier = createErrorNotifier({
+    handleError: (error) => {
+      console.error("Custom error handler", error);
+    },
+  });
+  const client = createInstance({
+    projectConfigManager: pollingProjectConfigManager,
+    errorNotifier,
+  });
+
+  return {
+    client,
+    actions: [getDecision],
+  }
+};
+
 // Test mode configuration
 const runTests = (
   optimizely: Client,
@@ -297,16 +350,24 @@ const runTests = (
   }
 };
 
-(() => {
-  const { client, actions } = getClient8();
-  const TEST_MODE: TestMode = "after"; // Change this to control test execution
+// (() => {
+//   const { client, actions } = getClient8();
+//   const TEST_MODE: TestMode = "after"; // Change this to control test execution
 
-  if (client) {
-    runTests(client, actions, TEST_MODE);
-  } else {
-    console.error("Optimizely client not initialized");
-  }
-})();
-
+//   if (client) {
+//     runTests(client, actions, TEST_MODE);
+//   } else {
+//     console.error("Optimizely client not initialized");
+//   }
+// })();
+export const getOptimizelyDecision = () => {
+	const { client, actions } =getClient7();
+	const TEST_MODE: TestMode = "before"; // Change this to control test execution
+	if(client) {
+		runTests(client, actions, TEST_MODE);
+	} else {
+		console.error("Optimizely client not initialized");
+	}
+}
 // Export for potential external access if needed
 // export { testActions, optimizely, runTests };

@@ -21,10 +21,19 @@ const delayAction = (
 
 export const getDecision = (client: Client) => {
   const userContext = client.createUserContext("user_id");
-  const decision = userContext?.decide("flag3");
+  const decision = userContext?.decide("product_sort");
   console.log("Decision", decision);
   return decision;
 };
+
+
+export const getDecisionInvalid = (client: Client) => {
+	const userContext = client.createUserContext("user_id");
+	// Pass a flag that doesn't exist
+	const decision = userContext?.decide("invalid_flag");
+	console.log("Decision", decision);
+	return decision;
+}
 
 export const fetchQualifiedSegments = (client: Client) => {
   const userContext = client.createUserContext("user_id");
