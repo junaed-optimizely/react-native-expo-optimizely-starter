@@ -26,14 +26,13 @@ export const getDecision = (client: Client) => {
   return decision;
 };
 
-
 export const getDecisionInvalid = (client: Client) => {
-	const userContext = client.createUserContext("user_id");
-	// Pass a flag that doesn't exist
-	const decision = userContext?.decide("invalid_flag");
-	console.log("Decision", decision);
-	return decision;
-}
+  const userContext = client.createUserContext("user_id");
+  // Pass a flag that doesn't exist
+  const decision = userContext?.decide("invalid_flag");
+  console.log("Decision", decision);
+  return decision;
+};
 
 export const fetchQualifiedSegments = (client: Client) => {
   const userContext = client.createUserContext("user_id");
@@ -62,7 +61,7 @@ export const sendOdpEventWithDelay = (delay: number) => (client: Client) => {
 export const trackEvent = (client: Client) => {
   console.log("trackEvent called");
   const userContext = client.createUserContext("user_id");
-	 // This must match with the event key in Optimizely app.
+  // This must match with the event key in Optimizely app.
   userContext?.trackEvent("purchase");
 };
 

@@ -9,7 +9,7 @@ import {
   DebugLog,
   Client,
   NOTIFICATION_TYPES,
-	createErrorNotifier,
+  createErrorNotifier,
 } from "@optimizely/optimizely-sdk";
 import {
   sendOdpEvent,
@@ -18,7 +18,7 @@ import {
   sendOdpEventWithDelay,
   trackEventWithDelay,
   trackEvent,
-	getDecisionInvalid,
+  getDecisionInvalid,
 } from "./action";
 
 import datafile from "./datafile.json";
@@ -182,9 +182,9 @@ const getClient6 = () => {
   const client = createInstance({
     projectConfigManager: pollingProjectConfigManager,
     eventProcessor: batchEventProcessor,
-		logger: createLogger({
-			level: DebugLog,
-		})
+    logger: createLogger({
+      level: DebugLog,
+    }),
   });
 
   client?.notificationCenter.addNotificationListener(
@@ -274,30 +274,28 @@ const getClient8 = () => {
   };
 };
 
-
 const getClient9 = () => {
-	/**
-	 * Optimizely client is created with a polling config manager and a logger with DebugLog level
-	 */
-	const pollingProjectConfigManager = createPollingProjectConfigManager({
-		sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
-	});
+  /**
+   * Optimizely client is created with a polling config manager and a logger with DebugLog level
+   */
+  const pollingProjectConfigManager = createPollingProjectConfigManager({
+    sdkKey: process.env.EXPO_PUBLIC_OPTIMIZELY_SDK_KEY!,
+  });
 
-	const logger = createLogger({
-		level: DebugLog,
-	});
+  const logger = createLogger({
+    level: DebugLog,
+  });
 
-	const client = createInstance({
-		projectConfigManager: pollingProjectConfigManager,
-		logger,
-	});
+  const client = createInstance({
+    projectConfigManager: pollingProjectConfigManager,
+    logger,
+  });
 
-	return {
-		client,
-		actions: [getDecision, getDecisionInvalid],
-	};
-}
-
+  return {
+    client,
+    actions: [getDecision, getDecisionInvalid],
+  };
+};
 
 const getClient10 = () => {
   /**
@@ -319,7 +317,7 @@ const getClient10 = () => {
   return {
     client,
     actions: [getDecision],
-  }
+  };
 };
 
 // Test mode configuration
@@ -361,13 +359,13 @@ const runTests = (
 //   }
 // })();
 export const getOptimizelyDecision = () => {
-	const { client, actions } =getClient7();
-	const TEST_MODE: TestMode = "before"; // Change this to control test execution
-	if(client) {
-		runTests(client, actions, TEST_MODE);
-	} else {
-		console.error("Optimizely client not initialized");
-	}
-}
+  const { client, actions } = getClient7();
+  const TEST_MODE: TestMode = "before"; // Change this to control test execution
+  if (client) {
+    runTests(client, actions, TEST_MODE);
+  } else {
+    console.error("Optimizely client not initialized");
+  }
+};
 // Export for potential external access if needed
 // export { testActions, optimizely, runTests };
